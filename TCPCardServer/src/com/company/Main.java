@@ -1,21 +1,32 @@
 package com.company;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
+import com.tests.ImageLoaderTests;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Main {
 
     public static void main(String[] args) {
-        Toolkit tKit = Toolkit.getDefaultToolkit();
-        ImageLoader imgLoader = new ImageLoader(tKit);
+//        ImageLoaderTests loader = new ImageLoaderTests("resources\\JPEG");
+//        loader.tryDisplayImages();
+        try {
+            int serverPort = 12009;
+            ServerSocket listenSocket = new ServerSocket(serverPort);
 
-        ArrayList<CardImage> cardImages = (ArrayList<CardImage>) imgLoader.loadAllImages("resources\\JPEG");
-        DrawImages imageDrawer = new DrawImages(new Dimension(640, 480), new GridLayout(13, 4));
+            System.out.println("Name: Joshua Lambert");
+            System.out.println("ID: 815007658");
 
-        CardImage toPrint = cardImages.get(0);
-        System.out.println("the image: " + toPrint);
-        /*imageDrawer.addImageToFrame(toPrint);
-        imageDrawer.displayFrame(true);*/
+            //listen for connections
+            while (true) {
+                //create new cardServer thread on client message
+                Socket clientSocket = listenSocket.accept();
+                CardServer cardServer = new CardServer(clientSocket);
+            }
+        } catch (IOException e) {
+            System.out.println("Listen socket:" + e.getMessage());
+        }
+
     }
 }
