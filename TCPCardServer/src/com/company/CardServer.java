@@ -1,7 +1,10 @@
 package com.company;
 
 import java.awt.*;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -68,33 +71,37 @@ public class CardServer extends Thread {
                 }
 
                 //print image
+                toPrint.formatMessage("Card count: ");
                 this.imageHandler.addImageToFrame(toPrint);
                 this.imageHandler.displayFrame(true);
 
+                outStream.writeUTF("Card processed: " + toPrint.getCardName() + "\t| Count: " + toPrint.getCardCount());
+                System.out.println("Card processed: " + toPrint.getCardName() + "\t| Count: " + toPrint.getCardCount());
 
                 //get next request
-                outStream.writeUTF("Card processed: " + cardName);
                 data = inStream.readUTF();
             }
 
-            //print all cards and counts if quit
             if (data.equalsIgnoreCase("quit")) {
+                System.out.println("\n\nQUIT ISSUED: The following cards were processed:");
+                cardInfoList.forEach(info -> {
+                    info.formatMessage("Card count: ");
+                    System.out.println("Card processed: " + info.getCardName() + "\t|Count: " + info.getCardCount());
+                });
                 this.imageHandler.addImagesToFrame(cardInfoList);
                 this.imageHandler.displayFrame(true);
-            }
 
+                try {
+                    clientSocket.close();
+                } catch (IOException e) {
+                    System.out.println("Failed to close clientSocket:" + e.getStackTrace());
+                }
+            }
         } catch (EOFException e) {
             System.out.println("EOF stacktrace:" + e.getStackTrace());
         } catch (IOException e) {
             System.out.println("IOException:" + e.getStackTrace());
-        } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                System.out.println("Failed to close clientSocket:" + e.getStackTrace());
-            }
         }
-
     }
 
     public CardImage findCardImage(String name) {

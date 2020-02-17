@@ -10,14 +10,14 @@ public class CardInfo {
     public CardInfo() {
     }
 
-    public CardInfo(String cardName,Integer cardCount) {
+    public CardInfo(String cardName, Integer cardCount) {
         this.message = "";
         this.cardCount = cardCount;
         this.cardName = cardName;
     }
 
-    public void formatMessage() {
-        this.message = "Card count: " + this.cardCount.toString();
+    public void formatMessage(String message) {
+        this.message = message + this.cardCount.toString();
     }
 
     public String getMessage() {
@@ -44,11 +44,11 @@ public class CardInfo {
         this.cardCount = cardCount;
     }
 
-    public void incrementCardCount(){
+    public void incrementCardCount() {
         this.cardCount++;
     }
 
-    public void decrementCardCount(){
+    public void decrementCardCount() {
         this.cardCount--;
     }
 
