@@ -17,6 +17,9 @@ public class Main {
 
             System.out.println("Name: Joshua Lambert");
             System.out.println("ID: 815007658");
+            System.out.println("Card server running on port: " + serverPort);
+            System.out.println("Listening for connections...");
+
 
             //listen for connections
             while (true) {
